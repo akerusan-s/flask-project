@@ -2,7 +2,7 @@ import datetime
 import sqlalchemy
 from .db_session import SqlAlchemyBase
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, TextAreaField, SubmitField, BooleanField, IntegerField
+from wtforms import PasswordField, StringField, TextAreaField, SubmitField, BooleanField, IntegerField, FileField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired
 from flask_login import UserMixin
@@ -10,9 +10,30 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy_serializer import SerializerMixin
 
 
+class UploadForm(FlaskForm):
+    file = FileField("Загрузить")
+    submit = SubmitField("Загрузить")
+
+
 class SearchForm(FlaskForm):
     response = StringField('Найти товар...')
     submit = SubmitField('Найти!')
+
+
+class ChangeName(FlaskForm):
+    new_name = StringField('Введите своё имя', validators=[DataRequired()])
+    new_surname = StringField('Введите свою фамилию', validators=[DataRequired()])
+    submit = SubmitField('Изменить')
+
+
+class ChangeEmail(FlaskForm):
+    new_email = email = EmailField('Новая почта', validators=[DataRequired()])
+    submit = SubmitField('Изменить')
+
+
+class ChangePassword(FlaskForm):
+    new_password = email = EmailField('Новый пароль', validators=[DataRequired()])
+    submit = SubmitField('Изменить')
 
 
 class RegisterForm(FlaskForm):

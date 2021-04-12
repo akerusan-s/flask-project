@@ -44,40 +44,28 @@
         <div class="log__table2">
             <h2>Зарегистрироваться</h2>
             <form action="{{ url_for('register') }}" method="POST">
-
                 <div class="form-group">
                     <label for="exampleInputPassword1">Введите своё имя</label>
-<!--                    <input class="form-control" type="text" placeholder="">-->
                     {{ form2.name(class="form-control", type="text") }}
                   </div>
-
                   <div class="form-group">
                     <label for="exampleInputPassword1">Введите свою фамилию</label>
-<!--                    <input class="form-control" type="text" placeholder="">-->
                       {{ form2.surname(class="form-control", type="text") }}
                   </div>
 
                 <div class="form-group">
                   <label for="exampleInputEmail1">Электронной почта</label>
-<!--                  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">-->
-                                        {{ form2.email(class="form-control", type="email", id="exampleInputEmail1") }}
+                    {{ form2.email(class="form-control", type="email", id="exampleInputEmail1") }}
                   <small id="emailHelp" class="form-text text-muted">Для одного адресса почты только один аккаунт</small>
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">Пароль</label>
-<!--                  <input type="password" class="form-control" id="exampleInputPassword1">-->
                     {{ form2.password(class="form-control", type="password") }}
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Повторите пароль</label>
-<!--                    <input type="password" class="form-control" id="exampleInputPassword1">-->
                     {{ form2.password_again(class="form-control", type="password") }}
                   </div>
-<!--                <div class="form-group form-check">-->
-<!--&lt;!&ndash;                  <input type="checkbox" class="form-check-input" id="exampleCheck1">&ndash;&gt;-->
-<!--                  <label class="form-check-label" for="exampleCheck1">Запомнить меня!</label>-->
-<!--                </div>-->
-<!--                <button type="submit" class="btn btn-primary">Зарегистрироваться</button>-->
                 <div style="margin-top:15px">{{ form2.submit2(class="btn btn-primary", type="submit") }}</div>
               </form>
         </div>
