@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="profile">
+<div style="padding-top: 64px;"></div>
+    <h1 style="margin: 3% 5% 2%;">Мой профиль</h1>
+
+
+    <h2 style="margin-left: 7%; margin-bottom: 20px;">Мои данные</h2>
+    <p style="font-size: 25px; margin-left: 10%;">Меня зовут <b style="font-size: 30px;">{{user.surname}} {{user.name}}</b>
+    <button type="button" class="btn btn-warning" style="margin-left: 10%;" data-toggle="modal" data-target="#exampleModal2" data-whatever="Имя">Изменить</button>
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Изменить Имя и Фамилию</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <form action="{{ url_for('change_name') }}" method="POST">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Новое значение имени</label>
+                  {{ name.new_name(type="text", class="form-control") }}
+              </div>
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Новое значение фамилии</label>
+                  {{ name.new_surname(type="text", class="form-control") }}
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+              {{ name.submit(class="btn btn-primary") }}
+          </div>
+              </form>
+        </div>
+      </div>
+    </div></p>
+    <p style="font-size: 25px; margin-left: 10%;">Моя почта <b style="font-size: 30px;">{{user.email}}</b>
+    <button type="button" class="btn btn-warning" style="margin-left: 10%;" data-toggle="modal" data-target="#exampleModal1" data-whatever="Почта">Изменить</button></p>   
+    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Изменить e-mail</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="{{ url_for('change_email') }}" method="post">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Новый адресс электронной почты</label>
+                  {{email.new_email(type="email", class="form-control")}}
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+              {{email.submit(class="btn btn-primary")}}
+          </div>
+        </div>
+          </form>
+      </div>
+    </div>
+    <button type="button" class="btn btn-dark" style="margin-left: 10%;" data-toggle="modal" data-target="#exampleModal" data-whatever="пароль">Поменять пароль</button>  
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Поменять пароль</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="{{ url_for('change_password') }}" method="post">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Новый пароль</label>
+                  {{password.new_password(type="text", class="form-control")}}
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+
+              {{ password.submit(class="btn btn-primary") }}
+          </div>
+            </form>
+        </div>
+      </div>
+    </div>
+
+
+    <hr style="width: 90%; margin: 50px auto;">
+
+
+    <h2 style="margin-left: 7%; margin-bottom: 30px;">Мои магазины</h2>
+    <div class="shops">
+        <div class="row row-cols-1 row-cols-md-3">
+            <div class="col mb-4">
+            <div class="card h-100">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                </div>
+            </div>
+            </div>
+            <div class="col mb-4">
+            <div class="card h-100">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This is a short card.</p>
+                </div>
+            </div>
+            </div>
+            <div class="col mb-4">
+            <div class="card h-100">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                <h5 class="card-title">Card title</h5>
+                <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
+                </div>
+            </div>
+            </div>
+    </div>        
+    </div>
+
+
+    <hr style="width: 90%; margin: 50px auto;">
+
+    <h2 style="margin-left: 7%; margin-bottom: 30px;">Избранные товары</h2>
+    <div class="store__container" style="margin-left: 10%; margin-right: 10%;">
+        <div class="row">
+          <div class="card mb-3 col-xl-6">
+            <div class="row no-gutters">
+              <div class="col-md-4">
+                <img src="..." class="card-img" alt="...">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-3 col-xl-6">
+            <div class="row no-gutters">
+              <div class="col-md-4">
+                <img src="..." class="card-img" alt="...">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-3 col-xl-6">
+            <div class="row no-gutters">
+              <div class="col-md-4">
+                <img src="..." class="card-img" alt="...">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-3 col-xl-6">
+            <div class="row no-gutters">
+              <div class="col-md-4">
+                <img src="..." class="card-img" alt="...">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title">Card title</h5>
+                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        </div>
+
+</section>
+{% endblock %}
+

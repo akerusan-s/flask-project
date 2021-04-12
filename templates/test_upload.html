@@ -1,0 +1,10 @@
+<form method="POST" enctype=multipart/form-data>
+    {{form.csrf_token}}
+  <div class="form-group">
+    <label for="exampleFormControlFile1">Example file input</label>
+<!--    <input type="file" class="form-control-file" id="exampleFormControlFile1">-->
+      {{form.file(type="file", class="form-control-file")}}
+      <br>
+      {{ form.submit(class="btn btn-primary", type="submit") }}
+  </div>
+</form>
