@@ -10,7 +10,7 @@
 }
 .navbar {
     justify-content: space-between;
-    position:fixed;
+
     width: 100%;
 }
 #navbarNav {
@@ -86,12 +86,10 @@ form.btn {
     padding-right: 15px;
 }
 
-.profile .btn {
-    margin-left: 30px;
-}
-.profile button {
-    margin-left: 30px;
-}
+.profile p .btn {
+    margin-left: 30px !important;
+} 
+
 
 .profile p {
     margin-bottom: 20px;
