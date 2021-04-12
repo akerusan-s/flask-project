@@ -133,38 +133,35 @@ def profile():
 @app.route('/change_name', methods=['POST'])
 def change_name():
     ch_name = ChangeName()
-    ch_password = ChangePassword()
-    ch_email = ChangeEmail()
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == current_user.id).first()
     user.name = ch_name.new_name.data
     user.surname = ch_name.new_surname.data
     db_sess.commit()
-    return render_template("my_profile.html", name=ch_name, password=ch_password, email=ch_email, user=current_user)
+    return redirect("/my_profile")
+    # return render_template("my_profile.html", name=ch_name, password=ch_password, email=ch_email, user=current_user)
 
 
 @app.route('/change_email', methods=['POST'])
 def change_email():
-    ch_name = ChangeName()
-    ch_password = ChangePassword()
     ch_email = ChangeEmail()
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == current_user.id).first()
     user.email = ch_email.new_email.data
     db_sess.commit()
-    return render_template("my_profile.html", name=ch_name, password=ch_password, email=ch_email, user=current_user)
+    return redirect("/my_profile")
+    # return render_template("my_profile.html", name=ch_name, password=ch_password, email=ch_email, user=current_user)
 
 
 @app.route('/change_password', methods=['POST'])
 def change_password():
-    ch_name = ChangeName()
     ch_password = ChangePassword()
-    ch_email = ChangeEmail()
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == current_user.id).first()
     user.set_password(ch_password.new_password.data)
     db_sess.commit()
-    return render_template("my_profile.html", name=ch_name, password=ch_password, email=ch_email, user=current_user)
+    return redirect("/my_profile")
+    # return render_template("my_profile.html", name=ch_name, password=ch_password, email=ch_email, user=current_user)
 
 
 if __name__ == '__main__':
