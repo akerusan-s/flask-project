@@ -5,7 +5,9 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from werkzeug.utils import secure_filename
 
 from data import db_session
-from data.__all_models import User, LoginForm, RegisterForm, ChangeEmail, ChangePassword, ChangeName
+from data.telephone_util import check_number
+from data.__all_models import User, LoginForm, RegisterForm, ChangeEmail, ChangePassword, ChangeName, CreateShop
+from data.__all_models import Shop
 
 UPLOAD_FOLDER = ''
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -59,7 +61,58 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route("/create_shop", methods=["POST", "GET"])
+def create_shop():
+    form_creation = CreateShop()
+    cities = open("db/cities.txt", encoding="UTF-8").read().split("\n")
+    return render_template("create_shop.html", title="Создать Магазин", form=form_creation, cities=cities)
+
+
+@app.route("/create", methods=["POST"])
+def create():
+    form_creation = CreateShop()
+    cities = open("db/cities.txt", encoding="UTF-8").read().split("\n")
+
+    file = request.files['file']
+    desc = request.form.get('text')
+    phone = form_creation.phone.data
+    city = request.form.get('select_city')
+    if ("+" in check_number(phone)) or (phone == ""):
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            shop = Shop(
+                description=desc,
+                name=form_creation.name.data,
+                email=form_creation.email.data,
+                phone=phone,
+                city=city,
+                goods_id="",
+                creator_id=current_user.id,
+                show_email=form_creation.show_email.data,
+                show_phone=form_creation.show_phone.data
+            )
+            db_sess = db_session.create_session()
+            db_sess.add(shop)
+            db_sess.commit()
+            app.config['UPLOAD_FOLDER'] = f"static/img/shops/{shop.id}"
+            os.mkdir(f"static/img/shops/{shop.id}")
+            os.mkdir(f"static/img/shops/{shop.id}/goods")
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return render_template("create_shop.html", title="Создать Магазин",
+                                   form=form_creation, cities=cities, message="")
+
+        return render_template("create_shop.html", title="Создать Магазин",
+                               form=form_creation, cities=cities, message="Недопустимый формат файлов")
+    return render_template("create_shop.html", title="Создать Магазин",
+                           form=form_creation, cities=cities, message="Недопустимый формат телефона")
+
+
+@app.route('/')
+def main_page():
+    return redirect("/store")
+
+
+@app.route('/access', methods=['GET', 'POST'])
 def log():
     form = LoginForm()
     form2 = RegisterForm()
@@ -75,7 +128,7 @@ def store():
 @login_required
 def logout():
     logout_user()
-    return redirect("/")
+    return redirect("/access")
 
 
 @app.route('/register', methods=['POST'])

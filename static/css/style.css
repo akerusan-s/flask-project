@@ -98,3 +98,20 @@ form.btn {
 .profile .shops {
     margin: 0% 10%;
 }
+
+
+.newshop {
+    margin: 56px 10% 0px;
+    font-size: 20px;
+}
+.newshop .form-group {
+    margin-top: 26px;
+}
+.newshop .btn {
+    margin-top: 30px;
+    font-size: 20px;
+}
+
+.newshop .checks {
+    margin-top: 15px;
+}

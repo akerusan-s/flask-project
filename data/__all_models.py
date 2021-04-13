@@ -10,6 +10,18 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy_serializer import SerializerMixin
 
 
+class CreateShop(FlaskForm):
+    description = TextAreaField("Описание", validators=[DataRequired()])
+    name = StringField("Название", validators=[DataRequired()])
+    email = EmailField("Email", validators=[DataRequired()])
+    phone = StringField("Телефон")
+    city = StringField("Город", validators=[DataRequired()])
+    photo = FileField("Загрузить")
+    show_email = BooleanField("Показывать ли Email")
+    show_phone = BooleanField("Показывать ли Телефон")
+    submit = SubmitField("Создать")
+
+
 class UploadForm(FlaskForm):
     file = FileField("Загрузить")
     submit = SubmitField("Загрузить")
