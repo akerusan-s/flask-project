@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+  
+
+<section class="shop">
+    <div class="row">
+        <img class="col-xl-6" src="" alt="">
+        <div class="col-xl-6">
+            <div class="info">
+                <h2>{{shop.name}}</h2>
+                <div class="info_cell"><label>Телефон</label><label>{{shop.phone}}</label></div>
+                <div class="info_cell"><label>Email</label><label>{{shop.email}}</label></div>
+                <div class="info_cell"><label>Город</label><label>{{shop.city}}</label></div>
+            </div>
+        </div>
+    </div>
+    <div class="shop__text">
+        <p>{{shop.description}}</p>
+        {% if current_user.id == shop.creator_id %}
+        <button type="button" class="btn btn-warning">Изменить</button>
+        {% endif %}
+    </div>
+    <hr>
+    <div class="shop__goods">
+        <h3>Товары магазина</h3>
+{% if current_user.id == shop.creator_id %}
+        <button type="button" class="btn btn-dark">Добавить</button>
+{% endif %}
+
+        <div class="row">
+            <div class="card mb-3 col-xl-6">
+              <div class="row no-gutters">
+                <div class="col-md-4">
+                  <img src="..." class="card-img" alt="...">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+            <div class="card mb-3 col-xl-6">
+              <div class="row no-gutters">
+                <div class="col-md-4">
+                  <img src="..." class="card-img" alt="...">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="card mb-3 col-xl-6">
+              <div class="row no-gutters">
+                <div class="col-md-4">
+                  <img src="..." class="card-img" alt="...">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          
+            <div class="card mb-3 col-xl-6">
+              <div class="row no-gutters">
+                <div class="col-md-4">
+                  <img src="..." class="card-img" alt="...">
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+    </div>
+</section>
+
+
+{% endblock %}

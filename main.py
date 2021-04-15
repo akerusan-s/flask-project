@@ -1,4 +1,6 @@
 import os
+import PIL
+from PIL import Image
 
 from flask import Flask, render_template, redirect, url_for, request, send_from_directory
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -24,32 +26,6 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
 
 
-@app.route('/test_upl', methods=['GET', 'POST'])
-def upload_file():
-    if request.method == 'POST':
-        file = request.files['file']
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file',
-                                    filename=filename))
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form action="" method=post enctype=multipart/form-data>
-      <p><input type=file name=file>
-         <input type=submit value=Upload>
-    </form>
-    '''
-
-
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'],
-                               filename)
-
-
 @app.errorhandler(401)
 def problem_401(e):
     return redirect("/")
@@ -59,6 +35,20 @@ def problem_401(e):
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
+
+
+@app.route("/all_shops")
+def all_shops():
+    db_sess = db_session.create_session()
+    created_shops = db_sess.query(Shop).limit(10).all()
+    return render_template("shops.html", shops=created_shops)
+
+
+@app.route("/shop/<shop_id>")
+def shop(shop_id):
+    db_sess = db_session.create_session()
+    current_shop = db_sess.query(Shop).filter(Shop.id == shop_id).first()
+    return render_template("shop.html", shop=current_shop)
 
 
 @app.route("/create_shop", methods=["POST", "GET"])
@@ -94,12 +84,18 @@ def create():
             db_sess = db_session.create_session()
             db_sess.add(shop)
             db_sess.commit()
+
             app.config['UPLOAD_FOLDER'] = f"static/img/shops/{shop.id}"
             os.mkdir(f"static/img/shops/{shop.id}")
             os.mkdir(f"static/img/shops/{shop.id}/goods")
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return render_template("create_shop.html", title="Создать Магазин",
-                                   form=form_creation, cities=cities, message="")
+
+            img = Image.open(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            maxsize = (628, 628)
+            img.thumbnail(maxsize, PIL.Image.ANTIALIAS)
+            img.save(os.path.join(app.config['UPLOAD_FOLDER'], "main.png"))
+            os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return redirect("/my_profile")
 
         return render_template("create_shop.html", title="Создать Магазин",
                                form=form_creation, cities=cities, message="Недопустимый формат файлов")
@@ -180,7 +176,12 @@ def profile():
     ch_password = ChangePassword()
     ch_email = ChangeEmail()
     user = current_user
-    return render_template("my_profile.html", name=ch_name, password=ch_password, email=ch_email, user=user)
+
+    db_sess = db_session.create_session()
+    my_shops = db_sess.query(Shop).filter(Shop.creator_id == current_user.id).all()
+    return render_template("my_profile.html", name=ch_name,
+                           password=ch_password, email=ch_email,
+                           user=user, shops=my_shops)
 
 
 @app.route('/change_name', methods=['POST'])
