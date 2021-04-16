@@ -7,92 +7,60 @@
 
 <section class="shop">
     <div class="row">
-        <img class="col-xl-6" src="" alt="">
+        <img class="col-xl-6" src="/static/img/shops/{{ shop.id }}/main.png" alt="">
         <div class="col-xl-6">
             <div class="info">
                 <h2>{{shop.name}}</h2>
+                {% if shop.show_phone %}
                 <div class="info_cell"><label>Телефон</label><label>{{shop.phone}}</label></div>
+                {% endif %}
+                {% if shop.show_email %}
                 <div class="info_cell"><label>Email</label><label>{{shop.email}}</label></div>
+                {% endif %}
                 <div class="info_cell"><label>Город</label><label>{{shop.city}}</label></div>
             </div>
+            
+            {% if current_user.id == shop.creator_id %}
+            <button type="button" class="btn btn-danger">Удалить</button>
+            {% endif %}
+
         </div>
     </div>
     <div class="shop__text">
         <p>{{shop.description}}</p>
         {% if current_user.id == shop.creator_id %}
-        <button type="button" class="btn btn-warning">Изменить</button>
+        <a href=""><button type="button" class="btn btn-warning">Изменить</button></a>
         {% endif %}
     </div>
     <hr>
     <div class="shop__goods">
         <h3>Товары магазина</h3>
 {% if current_user.id == shop.creator_id %}
-        <button type="button" class="btn btn-dark">Добавить</button>
+        <a href="{{url_for('create_good', shop_id=shop.id)}}"><button type="button" class="btn btn-dark">Добавить</button></a>
 {% endif %}
 
+        {% if goods.all() %}
         <div class="row">
+        {% for good in goods %}
             <div class="card mb-3 col-xl-6">
               <div class="row no-gutters">
                 <div class="col-md-4">
-                  <img src="..." class="card-img" alt="...">
+                  <img src="/static/img/shops/{{good.shop_id}}/goods/{{good.id}}/good_photo_1.png" class="card-img" alt="...">
                 </div>
                 <div class="col-md-8">
                   <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                    <a href="{{url_for('good', shop_id=good.shop_id, good_id=good.id)}}"><h5 class="card-title">{{good.name}}</h5></a>
+                    <p class="card-text">{{good.description[:50]}}</p>
+                    <p class="card-text"><small class="text-muted">{{good.price}}</small></p>
                   </div>
                 </div>
               </div>
             </div>
-          
-            <div class="card mb-3 col-xl-6">
-              <div class="row no-gutters">
-                <div class="col-md-4">
-                  <img src="..." class="card-img" alt="...">
-                </div>
-                <div class="col-md-8">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          
-          
-            <div class="card mb-3 col-xl-6">
-              <div class="row no-gutters">
-                <div class="col-md-4">
-                  <img src="..." class="card-img" alt="...">
-                </div>
-                <div class="col-md-8">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          
-          
-            <div class="card mb-3 col-xl-6">
-              <div class="row no-gutters">
-                <div class="col-md-4">
-                  <img src="..." class="card-img" alt="...">
-                </div>
-                <div class="col-md-8">
-                  <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                  </div>
-                </div>
-              </div>
-            </div>
+        {% endfor %}
           </div>
+        {%else%}
+        <p>Здесь ещё нет товаров!</p>
+        {%endif%}
 
 
 

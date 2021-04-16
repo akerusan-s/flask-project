@@ -10,6 +10,17 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy_serializer import SerializerMixin
 
 
+class AddGood(FlaskForm):
+    description = TextAreaField("Описание", validators=[DataRequired()])
+    name = StringField("Название", validators=[DataRequired()])
+    price = IntegerField("Цена")
+    group = StringField("Категория", default="Другое")
+    photo = FileField("Загрузить фото", validators=[DataRequired()])
+    active = BooleanField("Активно ли")
+    count_goods = IntegerField("Количество")
+    submit = SubmitField("Создать")
+
+
 class CreateShop(FlaskForm):
     description = TextAreaField("Описание", validators=[DataRequired()])
     name = StringField("Название", validators=[DataRequired()])
@@ -74,9 +85,9 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
 
-    liked_goods = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=True)
-    liked_shops = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=True)
-    shops_created = sqlalchemy.Column(sqlalchemy.String, index=True, unique=True, nullable=True)
+    liked_goods = sqlalchemy.Column(sqlalchemy.String, index=True, nullable=True, default=",")
+    liked_shops = sqlalchemy.Column(sqlalchemy.String, index=True, nullable=True, default=",")
+    shops_created = sqlalchemy.Column(sqlalchemy.String, index=True, nullable=True, default=",")
 
     def __repr__(self):
         return f'<User> {self.id} {self.surname} {self.name}'
@@ -105,6 +116,8 @@ class Shop(SqlAlchemyBase, UserMixin, SerializerMixin):
     show_email = sqlalchemy.Column(sqlalchemy.BOOLEAN, nullable=True)
     show_phone = sqlalchemy.Column(sqlalchemy.BOOLEAN, nullable=True)
 
+    likes = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, default=0)
+
     def __repr__(self):
         return f'<Shop> {self.id} {self.name} {self.email}'
 
@@ -121,6 +134,8 @@ class Good(SqlAlchemyBase, UserMixin, SerializerMixin):
     likes = sqlalchemy.Column(sqlalchemy.Integer)
     modified_date = sqlalchemy.Column(sqlalchemy.DateTime, default=datetime.datetime.now)
     active = sqlalchemy.Column(sqlalchemy.BOOLEAN, nullable=True)
+    count_pictures = sqlalchemy.Column(sqlalchemy.Integer, default=1)
+    count_goods = sqlalchemy.Column(sqlalchemy.Integer, default=1)
 
     def __repr__(self):
         return f'<Shop> {self.id} {self.name} {self.email}'

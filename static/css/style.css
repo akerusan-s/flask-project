@@ -1,3 +1,15 @@
+a {
+    text-decoration: none;
+    color: black
+}
+img {
+    object-fit: cover;
+}
+
+body {
+    margin-bottom: 40px;
+}
+
 .nav-text {
     color: white;
     margin-left: 10px;
@@ -147,4 +159,40 @@ form.btn {
 
 .shop .btn {
     margin-bottom: 35px;
+}
+.shop .info .btn {
+    margin-top: 20px;
+}
+
+
+.good {
+    margin: 64px 10%;
+}
+
+.good .row {
+    background-color: rgb(235, 235, 235);
+}
+
+.good .row label {
+    margin: 35px 0px 35px 0px;
+}
+.good h3 {
+    margin-top: 24px;
+}
+
+.good .info_cell {
+    display:flex;
+    justify-content: space-between;
+}
+.good label {
+    font-size: 22px;
+    margin-top: 10px;
+}
+
+.good_text {
+    margin: 35px 10%;
+    font-size: 20px;
+}
+.good .carousel {
+    margin-top: 35px;
 }

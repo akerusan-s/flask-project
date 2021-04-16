@@ -19,7 +19,7 @@
             <img src="/static/img/shops/{{shop.id}}/main.png" class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title"><a href="{{ url_for('shop', shop_id=shop.id) }}" style="text-decoration:none;color:black;">{{shop.name}}</a></h5>
-              <p class="card-text">{{shop.description[:50]}}</p>
+              <p class="card-text">{{shop.description[:50]}}...</p>
             </div>
           </div>
         </div>

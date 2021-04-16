@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+  <section class="newshop">
+    <h2>Добавить товар</h2>
+    <form action="{{ url_for('creation_good', shop_id=shop.id)}}" method="POST" enctype=multipart/form-data>
+        <div class="form-group row">
+            <label class="col-sm-2" for="exampleFormControlTextarea1">Название</label>
+            <div class="col-sm-10">
+<!--               <input class="form-control" type="text">-->
+                {{form.name(class="form-control", type="text")}}
+            </div>
+          </div>
+
+        
+          <div class="form-group row">
+            <label class="col-sm-2" for="exampleFormControlSelect1">Категория</label>
+            <div class="col-sm-10">
+            <select name="select_city" class="form-control" id="exampleFormControlSelect1">
+                {% for category in categories %}
+              <option value="{{ category }}">{{category}}</option>
+                {% endfor %}
+
+            </select>
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+          <label class="col-sm-2" for="exampleFormControlTextarea1">Описание</label>
+          <div class="col-sm-10">
+          <textarea name="text" maxlength="8192" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+          </div>
+        </div>
+
+
+
+        <div class="form-group row">
+            <label class="col-sm-2" for="exampleFormControlInput1">Цена товара</label>
+            <div class="col-sm-10">
+<!--           <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="19990">-->
+                {{form.price(type="number", class="form-control", id="exampleFormControlInput1", placeholder="19990")}}
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <label class="col-sm-2" for="exampleFormControlInput1">Цена товара</label>
+            <div class="col-sm-10">
+<!--           <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="19990">-->
+                {{form.count_goods(type="number", class="form-control", id="exampleFormControlInput1", placeholder="1")}}
+            </div>
+        </div>
+    
+
+        <div class="form-group">
+            <label for="exampleFormControlFile1">Загрузить фото товара</label>
+            <input type="file" name="file" class="form-control-file" id="exampleFormControlFile1">
+            <small id="emailHelp" class="form-text text-muted">(вы сможете загрузить ещё фото позже)</small>
+        </div>
+
+        <div class="checks">
+        <div class="form-check">
+            {{form.active(class="form-check-input", type="checkbox")}}
+            <label class="form-check-label" for="defaultCheck1">
+              Показывать товар
+            </label>
+            <small style="margin-left: 30px;" id="emailHelp" class="form-text text-muted">(не ставьте галочку, чтобы нкито не смог увидеть Ваш товар)</small>
+          </div>
+
+        </div>
+<!--       <button type="button" class="btn btn-primary">Добавить</button>-->
+        {{ form.submit(class="btn btn-primary") }}
+
+      </form>
+</section>
+
+
+
+    {%if message%}
+    <div style="margin-top: 30px; margin-top: 80px; margin-left:10%;margin-right:10%" class="alert alert-danger" role="alert">{{message}}</div>
+    {%endif%}
+{% endblock %}

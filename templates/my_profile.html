@@ -119,7 +119,7 @@
                 <img src="/static/img/shops/{{shop.id}}/main.png" class="card-img-top" alt="...">
                 <div class="card-body">
                 <h5 class="card-title"><a href="{{ url_for('shop', shop_id=shop.id) }}" style="text-decoration:none;color:black;">{{shop.name}}</a></h5>
-                <p class="card-text">{{(shop.description)[:50]}}</p>
+                <p class="card-text">{{(shop.description)[:50]}}...</p>
                 </div>
             </div>
             </div>
@@ -135,68 +135,30 @@
 
     <h2 style="margin-left: 7%; margin-bottom: 30px;">Избранные товары</h2>
     <div class="store__container" style="margin-left: 10%; margin-right: 10%;">
+        {% if goods.all()%}
         <div class="row">
-          <div class="card mb-3 col-xl-6">
-            <div class="row no-gutters">
-              <div class="col-md-4">
-                <img src="..." class="card-img" alt="...">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                </div>
-              </div>
-            </div>
-          </div>
 
+        {% for good in goods %}
           <div class="card mb-3 col-xl-6">
             <div class="row no-gutters">
               <div class="col-md-4">
-                <img src="..." class="card-img" alt="...">
+                <img src="/static/img/shops/{{good.shop_id}}/goods/{{good.id}}/good_photo_1.png" class="card-img" alt="...">
               </div>
               <div class="col-md-8">
                 <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                    <a href="{{url_for('good', shop_id=good.shop_id, good_id=good.id)}}"><h5 class="card-title">{{good.name}}</h5></a>
+                  <p class="card-text">{{good.description[:50]}}</p>
+                  <p class="card-text"><small class="text-muted">{{good.price}}</small></p>
                 </div>
               </div>
             </div>
           </div>
-
-          <div class="card mb-3 col-xl-6">
-            <div class="row no-gutters">
-              <div class="col-md-4">
-                <img src="..." class="card-img" alt="...">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="card mb-3 col-xl-6">
-            <div class="row no-gutters">
-              <div class="col-md-4">
-                <img src="..." class="card-img" alt="...">
-              </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">Card title</h5>
-                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                  <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                </div>
-              </div>
-            </div>
-          </div>
+            {% endfor %}
 
         </div>
+        {% else %}
+        <p> У Вас ещё нет избранных товаров. Самое время добавить! </p>
+        {%endif%}
         </div>
 
 </section>
