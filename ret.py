@@ -1,2 +1,4 @@
-from PIL import Image
+import shutil
 
+
+shutil.rmtree("1234")

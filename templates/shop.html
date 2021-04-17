@@ -1,5 +1,15 @@
 {% extends "base.html" %}
-
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="../static/css/style.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+        crossorigin="anonymous">
+        <title>{{title}}</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  </head>
 {% block content %}
 
 
@@ -20,16 +30,158 @@
                 <div class="info_cell"><label>Город</label><label>{{shop.city}}</label></div>
             </div>
             
+
+
+
             {% if current_user.id == shop.creator_id %}
-            <button type="button" class="btn btn-danger">Удалить</button>
+
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+              Удалить
+            </button>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Удаление</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Вы собираетесь удалить этот магазин?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                      <form action="{{url_for('shop_delete', shop_id=shop.id)}}" method="post">
+<!--                    <a href=""><button type="button" class="btn btn-primary">Так, точно!</button></a>-->
+                          {{delete.submit(class="btn btn-primary")}}
+                      </form>
+                  </div>
+                </div>
+              </div>
+            </div>
             {% endif %}
+
+
+
+
 
         </div>
     </div>
     <div class="shop__text">
         <p>{{shop.description}}</p>
         {% if current_user.id == shop.creator_id %}
-        <a href=""><button type="button" class="btn btn-warning">Изменить</button></a>
+        <!-- <a href=""><button type="button" class="btn btn-warning">Изменить</button></a> -->
+
+
+
+
+
+
+        <a class="btn btn-warning" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+          Изменить
+        </a>
+        <div class="collapse" id="collapseExample">
+          <div class="card card-body">
+            <form action="{{ url_for('change_shop_info', shop_id=shop.id) }}" method="POST" enctype=multipart/form-data>
+              <div class="form-group row">
+                  <label class="col-sm-2" for="exampleFormControlTextarea1">Название</label>
+                  <div class="col-sm-10">
+      <!--                <input class="form-control" type="text">-->
+                      {{ form.name(class="form-control", type="text", value=shop.name) }}
+                  </div>
+                </div>
+      
+              <div class="form-group row">
+                <label class="col-sm-2" for="exampleFormControlTextarea1">Описание</label>
+                <div class="col-sm-10">
+                <textarea name="text" maxlength="8192" class="form-control" id="exampleFormControlTextarea1" rows="3">{{shop.description}}</textarea>
+                </div>
+              </div>
+      
+              <div class="form-group row">
+                  <label class="col-sm-2" for="exampleFormControlSelect1">Город</label>
+                  <div class="col-sm-10">
+                  <select name="select_city" class="form-control" id="exampleFormControlSelect1">
+                      {% for town in cities %}
+                    <option value="{{ town }}">{{town}}</option>
+                      {% endfor %}
+      
+                  </select>
+                  </div>
+              </div>
+      
+              <div class="form-group row">
+                  <label class="col-sm-2" for="exampleFormControlInput1">Рабочая почта</label>
+                  <div class="col-sm-10">
+      <!--            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="example@example.com">-->
+                      {{ form.email(type="email", class="form-control", id="exampleFormControlInput1", placeholder="example@example.com", value=shop.email) }}
+                  </div>
+              </div>
+      
+              <div class="form-group row">
+                  <label class="col-sm-2" for="exampleFormControlTextarea1">Рабочий телефон</label>
+                  <div class="col-sm-10">
+      <!--                <input class="form-control" type="text">-->
+                      {{ form.phone(class="form-control", type="text", value=shop.phone) }}
+                  </div>
+              </div>
+      
+<!--              <div class="form-group">-->
+<!--                  <label for="exampleFormControlFile1">Загрузить фото магазина</label>-->
+<!--                  <input type="file" name="file" class="form-control-file" id="exampleFormControlFile1">-->
+<!--              </div>-->
+      
+              <div class="checks">
+              <div class="form-check">
+<!--                  <input class="form-check-input" type="checkbox" value=on id="defaultCheck1">-->
+                  {{ form.show_email(class="form-check-input", type="checkbox") }}
+                  <label class="form-check-label" for="defaultCheck1">
+                    Показывать почту
+                  </label>
+                </div>
+      
+                <div class="form-check">
+      <!--            <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">-->
+                    {{ form.show_phone(class="form-check-input", type="checkbox") }}
+                  <label class="form-check-label" for="defaultCheck1">
+                    Показывать телефон
+                  </label>
+                </div>
+              </div>
+      <!--        <button type="button" class="btn btn-primary">Создать</button>-->
+              {{ form.submit(class="btn btn-primary") }}
+            </form>
+              {% if form.message %}
+              <div style="margin-top: 30px; margin-top: 80px; margin-left:10%;margin-right:10%" class="alert alert-danger" role="alert">{{message}}</div>
+              {% endif %}
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         {% endif %}
     </div>
     <hr>
@@ -70,3 +222,5 @@
 
 
 {% endblock %}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>

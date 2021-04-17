@@ -1,5 +1,6 @@
 import os
 import PIL
+import shutil
 from PIL import Image
 
 from flask import Flask, render_template, redirect, url_for, request, send_from_directory
@@ -9,7 +10,7 @@ from werkzeug.utils import secure_filename
 from data import db_session
 from data.telephone_util import check_number
 from data.__all_models import User, LoginForm, RegisterForm, ChangeEmail, ChangePassword, ChangeName, CreateShop
-from data.__all_models import Shop, AddGood, Good
+from data.__all_models import Shop, AddGood, Good, DeleteShop
 
 UPLOAD_FOLDER = ''
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
@@ -51,10 +52,52 @@ def shop(shop_id):
 
     shop_goods_find = current_shop.goods_id.split(",")
     shop_goods = db_sess.query(Good).filter(Good.id.in_(shop_goods_find))
-    return render_template("shop.html", shop=current_shop, goods=shop_goods, title=current_shop.name)
+    cities = open("db/cities.txt", encoding="UTF-8").read().split("\n")
+    return render_template("shop.html", shop=current_shop, goods=shop_goods,
+                           title=current_shop.name, form=CreateShop(), cities=cities, delete=DeleteShop())
 
 
-@app.route("/shop/<shop_id>/<good_id>")
+@app.route("/shop/<shop_id>/shop_delete", methods=["POST"])
+def shop_delete(shop_id):
+    current_shop = db_sess.query(Shop).filter(Shop.id == shop_id).first()
+    db_sess.delete(current_shop)
+    db_sess.commit()
+    shutil.rmtree(f"static/img/shops/{shop_id}")
+
+    return redirect("/my_profile")
+
+
+@app.route("/shop/<shop_id>/change_shop_info", methods=["POST"])
+def change_shop_info(shop_id):
+    form_creation = CreateShop()
+    cities = open("db/cities.txt", encoding="UTF-8").read().split("\n")
+    desc = request.form.get('text')
+    phone = form_creation.phone.data
+    city = request.form.get('select_city')
+
+    db_sess = db_session.create_session()
+    shop = db_sess.query(Shop).filter(Shop.id == shop_id).first()
+
+    shop_goods_find = shop.goods_id.split(",")
+    shop_goods = db_sess.query(Good).filter(Good.id.in_(shop_goods_find))
+    if ("+" in check_number(phone)) or (phone == ""):
+        shop.description = desc
+        shop.name = form_creation.name.data
+        shop.email = form_creation.email.data
+        shop.phone = phone
+        shop.city = city
+        shop.show_email = form_creation.show_email.data
+        shop.show_phone = form_creation.show_phone.data
+        db_sess.commit()
+
+        return redirect(f"/shop/{shop.id}")
+
+    return render_template("shop.html", shop=shop, goods=shop_goods, delete=DeleteShop(),
+                           title=shop.name, form=CreateShop(), cities=cities,
+                           message="Недопустимый формат телефона")
+
+
+@app.route("/shop/<shop_id>/goods/<good_id>")
 def good(shop_id, good_id):
     db_sess = db_session.create_session()
     current_shop = db_sess.query(Shop).filter(Shop.id == shop_id).first()
