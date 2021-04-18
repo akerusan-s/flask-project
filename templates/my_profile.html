@@ -161,6 +161,37 @@
         {%endif%}
         </div>
 
+        <hr style="width: 90%; margin: 50px auto;">
+
+
+
+    <h2 style="margin-left: 7%; margin-bottom: 30px;">Избранные Магазины</h2>
+    <div class="store__container" style="margin-left: 10%; margin-right: 10%;">
+        {% if like_shops.all()%}
+    <div class="shops">
+
+        <div class="row row-cols-1 row-cols-md-3">
+            {% for shop in like_shops %}
+            <div class="col mb-4">
+            <div class="card h-100">
+                <img src="/static/img/shops/{{shop.id}}/main.png" class="card-img-top" alt="...">
+                <div class="card-body">
+                <h5 class="card-title"><a href="{{ url_for('shop', shop_id=shop.id) }}" style="text-decoration:none;color:black;">{{shop.name}}</a></h5>
+                <p class="card-text">{{(shop.description)[:50]}}...</p>
+                </div>
+            </div>
+            </div>
+            {% endfor %}
+
+
+    </div>
+    </div>
+        {% else %}
+        <p> У Вас ещё нет избранных магазинов. Самое время добавить! </p>
+        {%endif%}
+        </div>
+
+
 </section>
 {% endblock %}
 

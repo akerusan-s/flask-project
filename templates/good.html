@@ -4,7 +4,7 @@
 
 
 <section class="good">
-  <div class="row">
+  <div class="row" style="background-color: rgb(235, 235, 235);">
 
     <div class="caro col-xl-6">
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -41,7 +41,7 @@
 
   <div class="info col-xl-6">
 
-    <h3>Товар Название</h3>
+    <h3>{{good.name.capitalize()}}</h3>{%if not good.active%}<p style="color:red">(не активно)</p>{%endif%}
     <div class="info_cell"><label>Категория</label><label>{{good.group}}</label></div>
     <div class="info_cell"><label>Цена</label><label>{{good.price}}</label></div>
     <div class="info_cell"><label>Минимальная поставка</label><label>{{good.count_goods}} шт.</label></div>
@@ -52,6 +52,167 @@
 
   <div class="good_text">
     <p>{{good.description}}</p>
+
+
+
+{% if current_user.is_authenticated %}
+            {% if current_user.id == shop.creator_id %}
+
+            <a class="btn btn-warning" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+          Изменить
+        </a>
+
+        <div class="collapse" id="collapseExample">
+          <div class="card card-body">
+    <form action="{{ url_for('change_good_info', shop_id=shop.id, good_id=good.id)}}" method="POST" enctype=multipart/form-data>
+        <div class="form-group row">
+            <label class="col-sm-2" for="exampleFormControlTextarea1">Название</label>
+            <div class="col-sm-10">
+<!--               <input class="form-control" type="text">-->
+                {{form.name(class="form-control", type="text", value=good.name)}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-2" for="exampleFormControlSelect1">Категория</label>
+            <div class="col-sm-10">
+            <select name="select_city" class="form-control" id="exampleFormControlSelect1">
+                {% for category in categories %}
+              <option value="{{ category }}">{{category}}</option>
+                {% endfor %}
+
+            </select>
+            </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-2" for="exampleFormControlTextarea1">Описание</label>
+          <div class="col-sm-10">
+          <textarea name="text" maxlength="8192" class="form-control" id="exampleFormControlTextarea1" rows="3">{{good.description}}</textarea>
+          </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2" for="exampleFormControlInput1">Цена товара</label>
+            <div class="col-sm-10">
+<!--           <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="19990">-->
+                {{form.price(type="number", class="form-control", id="exampleFormControlInput1", placeholder="19990", value=good.price)}}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2" for="exampleFormControlInput1">Минимальный размер поставки</label>
+            <div class="col-sm-10">
+<!--           <input type="number" class="form-control" id="exampleFormControlInput1" placeholder="19990">-->
+                {{form.count_goods(type="number", class="form-control", id="exampleFormControlInput1", placeholder="1", value=good.count_goods)}}
+            </div>
+        </div>
+        <div class="checks">
+        <div class="form-check">
+            {{form.active(class="form-check-input", type="checkbox")}}
+            <label class="form-check-label" for="defaultCheck1">
+              Показывать товар
+            </label>
+            <small style="margin-left: 30px;" id="emailHelp" class="form-text text-muted">(не ставьте галочку, чтобы никто не смог увидеть Ваш товар)</small>
+          </div>
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+
+      </form>
+              {% if form.message %}
+              <div style="margin-top: 30px; margin-top: 80px; margin-left:10%;margin-right:10%" class="alert alert-danger" role="alert">{{message}}</div>
+              {% endif %}
+          </div>
+        </div>
+
+
+
+<button type="button" class="btn btn-dark" data-toggle="modal" data-target="#exampleModal1">
+  Добавить фото
+</button>
+
+<!-- Modal1 -->
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Добавить фото товара</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+    <form action="{{ url_for('add_good_photo', shop_id=shop.id, good_id=good.id) }}" method="POST" enctype=multipart/form-data>
+        <div class="form-group">
+            <label for="exampleFormControlFile1">Загрузить фото товара</label>
+            <input type="file" name="file_photo" class="form-control-file" id="exampleFormControlFile1">
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                {{ pic_form.submit(class="btn btn-primary") }}
+      </div>
+     </form>
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
+
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+              Удалить
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Удаление</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    Вы собираетесь удалить этот товар?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                      <form action="{{url_for('good_delete', shop_id=shop.id, good_id=good.id)}}" method="post">
+<!--                    <a href=""><button type="button" class="btn btn-primary">Так, точно!</button></a>-->
+                          {{delete.submit(class="btn btn-primary")}}
+                      </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+
+            {% if current_user.is_authenticated %}
+            {% if current_user.id != shop.creator_id %}
+            {% if not flag %}
+            <form method="post" action="{{ url_for('add_liked_good', shop_id=shop.id, good_id=good.id) }}">
+                {{ add_like.submit(class="btn btn-dark") }}
+            </form>
+            {% else %}
+            <form method="post" action="{{ url_for('delete_liked_good', shop_id=shop.id, good_id=good.id) }}">
+                {{ delete_like.submit(class="btn btn-dark") }}
+            </form>
+            {%endif%}
+            {% endif %}
+            {%endif%}
+
+
+        {%endif%}
+
+
+
+
+
+
+
+
+
+
+
   </div>
   <hr>
   <div class="contacts">

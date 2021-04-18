@@ -169,11 +169,8 @@ form.btn {
     margin: 64px 10%;
 }
 
-.good .row {
-    background-color: rgb(235, 235, 235);
-}
 
-.good .row label {
+.good .row .info label {
     margin: 35px 0px 35px 0px;
 }
 .good h3 {
@@ -184,8 +181,12 @@ form.btn {
     display:flex;
     justify-content: space-between;
 }
-.good label {
+.good .contacts label {
     font-size: 22px;
+    margin-top: 10px;
+}
+
+.good .form-group {
     margin-top: 10px;
 }
 

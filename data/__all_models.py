@@ -10,7 +10,20 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy_serializer import SerializerMixin
 
 
-class DeleteShop(FlaskForm):
+class DeleteLikedEntity(FlaskForm):
+    submit = SubmitField("Удалить из избранного")
+
+
+class AddLikedEntity(FlaskForm):
+    submit = SubmitField("Добавить в избранное")
+
+
+class AddPicture(FlaskForm):
+    photo = FileField("Загрузить фото", validators=[DataRequired()])
+    submit = SubmitField("Принять")
+
+
+class DeleteEntity(FlaskForm):
     submit = SubmitField("Удалить")
 
 
@@ -22,7 +35,7 @@ class AddGood(FlaskForm):
     photo = FileField("Загрузить фото", validators=[DataRequired()])
     active = BooleanField("Активно ли")
     count_goods = IntegerField("Количество")
-    submit = SubmitField("Создать")
+    submit = SubmitField("Принять")
 
 
 class CreateShop(FlaskForm):
