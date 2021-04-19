@@ -17,7 +17,7 @@ from data.__all_models import DeleteEntity as DeleteShop
 
 
 UPLOAD_FOLDER = ''
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
 api = Api(app)
