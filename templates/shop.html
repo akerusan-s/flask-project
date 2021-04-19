@@ -223,7 +223,7 @@
                 <div class="col-md-8">
                   <div class="card-body">
                     <a href="{{url_for('good', shop_id=good.shop_id, good_id=good.id)}}"><h5 class="card-title">{{good.name}}</h5></a>
-                    <p class="card-text">{{good.description[:50]}}</p>
+                    <p class="card-text">{{good.description[:50]}}...</p>
                     <p class="card-text"><small class="text-muted">{{good.price}}</small></p>
                   </div>
                 </div>

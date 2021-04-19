@@ -5,9 +5,11 @@ from PIL import Image
 
 from flask import Flask, render_template, redirect, url_for, request, send_from_directory, abort
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_restful import reqparse, abort, Api, Resource
 from werkzeug.utils import secure_filename
 
 from data import db_session
+from data import users_resource, shops_resource
 from data.telephone_util import check_number
 from data.__all_models import User, LoginForm, RegisterForm, ChangeEmail, ChangePassword, ChangeName, CreateShop
 from data.__all_models import Shop, AddGood, Good, AddPicture, AddLikedEntity, DeleteLikedEntity
@@ -18,6 +20,11 @@ UPLOAD_FOLDER = ''
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__)
+api = Api(app)
+api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:user_id>/<password>')
+api.add_resource(users_resource.UsersListResource, '/api/v2/users')
+api.add_resource(shops_resource.ShopsResource, '/api/v2/shops/<int:shop_id>')
+api.add_resource(shops_resource.ShopsListResource, '/api/v2/shops')
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -106,7 +113,12 @@ def delete_liked_shop(shop_id):
 @app.route("/shop/<shop_id>/shop_delete", methods=["POST"])
 def shop_delete(shop_id):
     current_shop = db_sess.query(Shop).filter(Shop.id == shop_id).first()
+    user = db_sess.query(User).filter(User.id == current_user.id).first()
     db_sess.delete(current_shop)
+    db_sess.commit()
+    created_shops = user.shops_created.split(",")
+    created_shops[created_shops.index(str(shop_id))] = ""
+    user.shops_created = ",".join(created_shops)
     db_sess.commit()
     shutil.rmtree(f"static/img/shops/{shop_id}")
     return redirect("/my_profile")
@@ -369,6 +381,8 @@ def create():
     desc = request.form.get('text')
     phone = form_creation.phone.data
     city = request.form.get('select_city')
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == current_user.id).first()
     if ("+" in check_number(phone)) or (phone == ""):
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
@@ -383,9 +397,9 @@ def create():
                 show_email=form_creation.show_email.data,
                 show_phone=form_creation.show_phone.data
             )
-            current_user.shops_created += f"{shop.id},"
-            db_sess = db_session.create_session()
             db_sess.add(shop)
+            db_sess.commit()
+            user.shops_created += f"{shop.id},"
             db_sess.commit()
 
             app.config['UPLOAD_FOLDER'] = f"static/img/shops/{shop.id}"
@@ -415,7 +429,7 @@ def main_page():
 def log():
     form = LoginForm()
     form2 = RegisterForm()
-    return render_template('login.html', form=form, form2=form2, message="")
+    return render_template('login.html', form=form, form2=form2, message="", title="Авторизация")
 
 
 @app.route("/store")
@@ -458,7 +472,7 @@ def register():
     user.set_password(register_form.password.data)
     db_sess.add(user)
     db_sess.commit()
-    return redirect('/store')
+    return redirect('/access')
 
 
 @app.route('/login', methods=['POST'])

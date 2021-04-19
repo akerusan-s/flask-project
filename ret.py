@@ -1,5 +1,8 @@
-r = (",1,2,3,4,5,6,". split(",").index("4"))
-print(r)
-l = ",1,2,3,4,5,6,".split(",")
-l[r] = ""
-print(",".join(l))
+from requests import get, post, put, delete
+
+
+stat = "http://127.0.0.1:5000" + '/api/v2/shops/2'
+
+
+s = get(stat)
+print(s.json())

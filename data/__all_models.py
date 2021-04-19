@@ -133,7 +133,7 @@ class Shop(SqlAlchemyBase, UserMixin, SerializerMixin):
     show_email = sqlalchemy.Column(sqlalchemy.BOOLEAN, nullable=True)
     show_phone = sqlalchemy.Column(sqlalchemy.BOOLEAN, nullable=True)
 
-    likes = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, default=0)
+    likes = sqlalchemy.Column(sqlalchemy.Integer, default=0)
 
     def __repr__(self):
         return f'<Shop> {self.id} {self.name} {self.email}'
