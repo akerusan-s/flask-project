@@ -69,9 +69,11 @@ def shop(shop_id):
     shop_goods_find = current_shop.goods_id.split(",")
     shop_goods = db_sess.query(Good).filter(Good.id.in_(shop_goods_find))
     cities = open("db/cities.txt", encoding="UTF-8").read().split("\n")
-
-    if str(current_shop.id) in current_user.liked_shops.split(","):
-        flag = True
+    if current_user.is_authenticated:
+        if str(current_shop.id) in current_user.liked_shops.split(","):
+            flag = True
+        else:
+            flag = False
     else:
         flag = False
 
@@ -193,8 +195,11 @@ def good(shop_id, good_id):
     list_of_pictures = filter(lambda x: "." in x, os.listdir(f"static/img/shops/{shop_id}/goods/{good_id}"))
     categories = open("db/groups.txt", encoding="UTF-8").read().split("\n")
 
-    if str(good_id) in current_user.liked_goods.split(","):
-        flag = True
+    if current_user.is_authenticated:
+        if str(good_id) in current_user.liked_goods.split(","):
+            flag = True
+        else:
+            flag = False
     else:
         flag = False
     return render_template("good.html", shop=current_shop, good=current_good,
