@@ -43,6 +43,11 @@ def problem_401(e):
     return redirect("/")
 
 
+@app.errorhandler(403)
+def problem_403(e):
+    return redirect("/")
+
+
 @app.errorhandler(404)
 def problem_404(e):
     return redirect("/")
