@@ -9,7 +9,7 @@ from flask_restful import reqparse, abort, Api, Resource
 from werkzeug.utils import secure_filename
 
 from data import db_session
-from data import users_resource, shops_resource
+from data import users_resource, shops_resource, goods_resources
 from data.telephone_util import check_number
 from data.__all_models import User, LoginForm, RegisterForm, ChangeEmail, ChangePassword, ChangeName, CreateShop
 from data.__all_models import Shop, AddGood, Good, AddPicture, AddLikedEntity, DeleteLikedEntity
@@ -25,6 +25,8 @@ api.add_resource(users_resource.UsersResource, '/api/v2/users/<int:user_id>/<pas
 api.add_resource(users_resource.UsersListResource, '/api/v2/users')
 api.add_resource(shops_resource.ShopsResource, '/api/v2/shops/<int:shop_id>')
 api.add_resource(shops_resource.ShopsListResource, '/api/v2/shops')
+api.add_resource(goods_resources.GoodsResource, '/api/v2/goods/<int:good_id>')
+api.add_resource(goods_resources.GoodsListResource, '/api/v2/goods')
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
