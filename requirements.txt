@@ -5,3 +5,4 @@ Flask~=1.1.2
 requests~=2.25.1
 Pillow~=8.0.1
 flask_login
+flask_restful
