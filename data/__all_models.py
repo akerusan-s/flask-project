@@ -11,23 +11,28 @@ from sqlalchemy_serializer import SerializerMixin
 
 
 class DeleteLikedEntity(FlaskForm):
+    """ Форма для удаления сущности из избранного """
     submit = SubmitField("Удалить из избранного")
 
 
 class AddLikedEntity(FlaskForm):
+    """ Форма для добавления сущности в избранное """
     submit = SubmitField("Добавить в избранное")
 
 
 class AddPicture(FlaskForm):
+    """ Форма для добавления фото к товару """
     photo = FileField("Загрузить фото", validators=[DataRequired()])
     submit = SubmitField("Принять")
 
 
 class DeleteEntity(FlaskForm):
+    """ Форма для удаления сущности """
     submit = SubmitField("Удалить")
 
 
 class AddGood(FlaskForm):
+    """ Форма для добавления товара """
     description = TextAreaField("Описание", validators=[DataRequired()])
     name = StringField("Название", validators=[DataRequired()])
     price = IntegerField("Цена")
@@ -39,6 +44,7 @@ class AddGood(FlaskForm):
 
 
 class CreateShop(FlaskForm):
+    """ Форма для добавления магазина """
     description = TextAreaField("Описание", validators=[DataRequired()])
     name = StringField("Название", validators=[DataRequired()])
     email = EmailField("Email", validators=[DataRequired()])
@@ -50,33 +56,33 @@ class CreateShop(FlaskForm):
     submit = SubmitField("Принять")
 
 
-class UploadForm(FlaskForm):
-    file = FileField("Загрузить")
-    submit = SubmitField("Загрузить")
-
-
-class SearchForm(FlaskForm):
-    response = StringField('Найти товар...')
-    submit = SubmitField('Найти!')
+# Заготовочка на будущее
+# class SearchForm(FlaskForm):
+#     response = StringField('Найти товар...')
+#     submit = SubmitField('Найти!')
 
 
 class ChangeName(FlaskForm):
+    """ Форма для изменения имени пользователя """
     new_name = StringField('Введите своё имя', validators=[DataRequired()])
     new_surname = StringField('Введите свою фамилию', validators=[DataRequired()])
     submit = SubmitField('Изменить')
 
 
 class ChangeEmail(FlaskForm):
+    """ Форма для изменения эл.почты пользователя """
     new_email = email = EmailField('Новая почта', validators=[DataRequired()])
     submit = SubmitField('Изменить')
 
 
 class ChangePassword(FlaskForm):
+    """ Форма для изменения пароля пользователя """
     new_password = email = EmailField('Новый пароль', validators=[DataRequired()])
     submit = SubmitField('Изменить')
 
 
 class RegisterForm(FlaskForm):
+    """ Форма для регистрации нового пользователя """
     name = StringField('Введите своё имя', validators=[DataRequired()])
     surname = StringField('Введите свою фамилию', validators=[DataRequired()])
     email = EmailField('Почта', validators=[DataRequired()])
@@ -86,6 +92,7 @@ class RegisterForm(FlaskForm):
 
 
 class LoginForm(FlaskForm):
+    """ Форма для авторизации пользователя """
     email = EmailField('Адресс электронной почты', validators=[DataRequired()])
     password = PasswordField('Пароль', validators=[DataRequired()])
     remember_me = BooleanField('Запомнить меня')
@@ -93,6 +100,7 @@ class LoginForm(FlaskForm):
 
 
 class User(SqlAlchemyBase, UserMixin, SerializerMixin):
+    """ Форма-модель пользователя """
     __tablename__ = 'users'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
@@ -110,13 +118,16 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
         return f'<User> {self.id} {self.surname} {self.name}'
 
     def set_password(self, password):
+        # хешируем введённый пароль пользователя, не явно хранится
         self.hashed_password = generate_password_hash(password)
 
     def check_password(self, password):
+        # для проверки введенного и фактического паролей
         return check_password_hash(self.hashed_password, password)
 
 
 class Shop(SqlAlchemyBase, UserMixin, SerializerMixin):
+    """ Форма-модель магазина """
     __tablename__ = 'shops'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
@@ -140,6 +151,7 @@ class Shop(SqlAlchemyBase, UserMixin, SerializerMixin):
 
 
 class Good(SqlAlchemyBase, UserMixin, SerializerMixin):
+    """ Форма-модель товара """
     __tablename__ = 'goods'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
