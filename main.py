@@ -669,7 +669,7 @@ def change_email():
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == current_user.id).first()  # пользователь
     # проверка на доступность email
-    if db_sess.query(User).filter(User.email == ch_email.new_email.data).first():
+    if not db_sess.query(User).filter(User.email == ch_email.new_email.data).first():
         user.email = ch_email.new_email.data  # изменение
         db_sess.commit()
         return redirect("/my_profile")
